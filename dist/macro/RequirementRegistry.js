@@ -9,7 +9,7 @@ class RequirementRegistry {
         this.checkerSuites = [];
     }
     requireTypeSuite(compilerArgs) {
-        let index = this.typeSuites.findIndex((typeSuite) => (0, util_1.isDeepStrictEqual)(typeSuite.compilerArgs, compilerArgs));
+        let index = this.typeSuites.findIndex((typeSuite) => util_1.isDeepStrictEqual(typeSuite.compilerArgs, compilerArgs));
         if (index === -1) {
             index = this.typeSuites.length;
             this.typeSuites.push({

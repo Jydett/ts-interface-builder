@@ -17,7 +17,7 @@ function getCallPaths(_a) {
     var { getTypeSuite = [], getCheckers = [] } = _a, rest = __rest(_a, ["getTypeSuite", "getCheckers"]);
     const restKeys = Object.keys(rest);
     if (restKeys.length) {
-        throw (0, errors_1.macroError)(`Reference(s) to unknown export(s): ${restKeys.join(", ")}`);
+        throw errors_1.macroError(`Reference(s) to unknown export(s): ${restKeys.join(", ")}`);
     }
     const callPaths = {
         getTypeSuite: [],
@@ -25,13 +25,13 @@ function getCallPaths(_a) {
     };
     getTypeSuite.forEach((path, index) => {
         if (!path.parentPath.isCallExpression()) {
-            throw (0, errors_1.macroError)(`Reference ${index + 1} to getTypeSuite not used for a call expression`);
+            throw errors_1.macroError(`Reference ${index + 1} to getTypeSuite not used for a call expression`);
         }
         callPaths.getTypeSuite.push(path.parentPath);
     });
     getCheckers.forEach((path, index) => {
         if (!path.parentPath.isCallExpression()) {
-            throw (0, errors_1.macroError)(`Reference ${index + 1} to getCheckers not used for a call expression`);
+            throw errors_1.macroError(`Reference ${index + 1} to getCheckers not used for a call expression`);
         }
         callPaths.getCheckers.push(path.parentPath);
     });

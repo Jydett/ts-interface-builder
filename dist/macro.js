@@ -24,7 +24,7 @@ const onceIdentifier = "once";
  */
 const macroHandler = (params) => {
     const { references, babel, state } = params;
-    const callPaths = (0, getCallPaths_1.getCallPaths)(references);
+    const callPaths = getCallPaths_1.getCallPaths(references);
     const somePath = callPaths.getTypeSuite[0] || callPaths.getCheckers[0];
     if (!somePath) {
         return;
@@ -60,7 +60,7 @@ const macroHandler = (params) => {
     ${registry.typeSuites
         .map(({ compilerArgs, id }) => `
           var ${id} = ${onceIdentifier}(function(){
-            return ${(0, compileTypeSuite_1.compileTypeSuite)(compilerArgs)};
+            return ${compileTypeSuite_1.compileTypeSuite(compilerArgs)};
           });
         `)
         .join("")}
@@ -80,7 +80,7 @@ const macroHandler = (params) => {
     // Done mutations (only helper functions below)
     function getCompilerArgs(callPath, functionName, callIndex) {
         const callDescription = `${functionName} call ${callIndex + 1}`;
-        const getArgValue = (0, getGetArgValue_1.getGetArgValue)(callPath, callDescription);
+        const getArgValue = getGetArgValue_1.getGetArgValue(callPath, callDescription);
         const basename = getArgValue(0) || path.basename(state.filename);
         const file = path.resolve(state.filename, "..", basename);
         // Get the user config passed to us by babel-plugin-macros, for use as default options
@@ -98,7 +98,7 @@ const macroHandler = (params) => {
     function parseStatements(code) {
         const parsed = babel.parse(code, { configFile: false });
         if (!parsed || parsed.type !== "File")
-            throw (0, errors_1.macroInternalError)();
+            throw errors_1.macroInternalError();
         return parsed.program.body;
     }
     function prependProgramStatement(statement) {
@@ -106,5 +106,4 @@ const macroHandler = (params) => {
     }
 };
 const macroParams = { configName: "ts-interface-builder-wl" };
-const macro = () => (0, babel_plugin_macros_1.createMacro)(macroHandler, macroParams);
-exports.macro = macro;
+exports.macro = () => babel_plugin_macros_1.createMacro(macroHandler, macroParams);

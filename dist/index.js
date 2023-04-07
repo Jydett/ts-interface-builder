@@ -20,6 +20,12 @@ const defaultHeader = `/**
 const ignoreNode = "";
 // The main public interface is `Compiler.compile`.
 class Compiler {
+    constructor(checker, options, topNode) {
+        this.checker = checker;
+        this.options = options;
+        this.topNode = topNode;
+        this.exportedNames = [];
+    }
     static compile(filePath, options = {}) {
         const createProgramOptions = { target: ts.ScriptTarget.Latest, module: ts.ModuleKind.CommonJS };
         const program = ts.createProgram([filePath], createProgramOptions);
@@ -30,12 +36,6 @@ class Compiler {
         }
         options = Object.assign({ format: defaultFormat, ignoreGenerics: false, ignoreIndexSignature: false, inlineImports: false, defaultSpace: defaultIndentSize }, options);
         return new Compiler(checker, options, topNode).compileNode(topNode);
-    }
-    constructor(checker, options, topNode) {
-        this.checker = checker;
-        this.options = options;
-        this.topNode = topNode;
-        this.exportedNames = [];
     }
     getName(id) {
         const symbol = this.checker.getSymbolAtLocation(id);
@@ -250,7 +250,7 @@ class Compiler {
         return prefix +
             this._compileSourceFileStatements(node) + "\n\n" +
             "const exportedTypeSuite" + (this.options.format === "ts" ? ": t.ITypeSuite" : "") + " = {\n" +
-            this.exportedNames.map((n) => `  ${n},\n`).join("") +
+            this.exportedNames.map((n) => " ".repeat(this.options.defaultSpace) + `${n},\n`).join("") +
             "};\n" +
             "export default exportedTypeSuite;\n";
     }
@@ -267,7 +267,7 @@ class Compiler {
     }
     _formatExport(name, expression) {
         return this.options.format === "js:cjs"
-            ? `  ${name}: ${this.indent(expression)},`
+            ? " ".repeat(this.options.defaultSpace) + `${name}: ${this.indent(expression)},`
             : `export const ${name} = ${expression};`;
     }
 }
@@ -341,6 +341,7 @@ function main() {
             continue;
         }
         if (verbose) {
+            console.log(`Starting with options '${JSON.stringify(options)}'`);
             console.log(`Compiling ${filePath} -> ${outPath}`);
         }
         const generatedCode = defaultHeader + Compiler.compile(filePath, options);

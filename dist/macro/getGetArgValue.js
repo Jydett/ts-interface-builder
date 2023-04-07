@@ -5,7 +5,7 @@ const errors_1 = require("./errors");
 function getGetArgValue(callPath, callDescription) {
     const argPaths = callPath.get("arguments");
     if (!Array.isArray(argPaths))
-        throw (0, errors_1.macroInternalError)();
+        throw errors_1.macroInternalError();
     return (argIndex) => {
         const argPath = argPaths[argIndex];
         if (!argPath) {
@@ -21,7 +21,7 @@ function getGetArgValue(callPath, callDescription) {
              * Maybe babel-plugin-macros doesn't support "input -> TS -> babel -> output" pipeline?
              * Or maybe I'm doing that pipeline wrong?
              */
-            throw (0, errors_1.macroError)(`Unable to evaluate argument ${argIndex + 1} of ${callDescription}`);
+            throw errors_1.macroError(`Unable to evaluate argument ${argIndex + 1} of ${callDescription}`);
         }
         return value;
     };

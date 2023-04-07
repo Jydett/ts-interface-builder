@@ -12,7 +12,7 @@ function compileTypeSuite(args) {
         compiled = index_1.Compiler.compile(file, options);
     }
     catch (error) {
-        throw (0, errors_1.macroError)(`Error ${context}: ${error.name}: ${error.message}`);
+        throw errors_1.macroError(`Error ${context}: ${error.name}: ${error.message}`);
     }
     /*
       Here we have `compiled` in "js:cjs" format.
@@ -26,7 +26,7 @@ function compileTypeSuite(args) {
     const postfix = ";\n";
     if (!exportStatement.startsWith(prefix) ||
         !exportStatement.endsWith(postfix)) {
-        throw (0, errors_1.macroInternalError)(`Unexpected output format from Compiler (${context})`);
+        throw errors_1.macroInternalError(`Unexpected output format from Compiler (${context})`);
     }
     return exportStatement.slice(prefix.length, -postfix.length);
 }

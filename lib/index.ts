@@ -265,7 +265,7 @@ export class Compiler {
     return prefix +
       this._compileSourceFileStatements(node) + "\n\n" +
       "const exportedTypeSuite" + (this.options.format === "ts" ? ": t.ITypeSuite" : "") + " = {\n" +
-      this.exportedNames.map((n) => `  ${n},\n`).join("") +
+      this.exportedNames.map((n) => " ".repeat(this.options.defaultSpace) + `${n},\n`).join("") +
       "};\n" +
       "export default exportedTypeSuite;\n";
   }
@@ -281,7 +281,7 @@ export class Compiler {
   }
   private _formatExport(name: string, expression: string): string {
     return this.options.format === "js:cjs"
-        ? `  ${name}: ${this.indent(expression)},`
+        ? " ".repeat(this.options.defaultSpace) +`${name}: ${this.indent(expression)},`
         : `export const ${name} = ${expression};`;
   }
 }
@@ -366,6 +366,7 @@ export function main() {
     }
 
     if (verbose) {
+      console.log(`Starting with options '${JSON.stringify(options)}'`);
       console.log(`Compiling ${filePath} -> ${outPath}`);
     }
     const generatedCode = defaultHeader + Compiler.compile(filePath, options);
