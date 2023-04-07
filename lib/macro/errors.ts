@@ -1,7 +1,7 @@
 import {MacroError} from "babel-plugin-macros";
 
 export function macroError(message: string): MacroError {
-    return new MacroError(`ts-interface-builder/macro: ${message}`);
+    return new MacroError(`ts-interface-builder-wl/macro: ${message}`);
 }
 
 export function macroInternalError(message?: string): MacroError {

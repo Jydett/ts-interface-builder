@@ -1,7 +1,7 @@
-# ts-interface-builder
+# ts-interface-builder-wl
 
-[![Build Status](https://travis-ci.org/gristlabs/ts-interface-builder.svg?branch=master)](https://travis-ci.org/gristlabs/ts-interface-builder)
-[![npm version](https://badge.fury.io/js/ts-interface-builder.svg)](https://badge.fury.io/js/ts-interface-builder)
+[![Build Status](https://travis-ci.org/gristlabs/ts-interface-builder-wl.svg?branch=master)](https://travis-ci.org/gristlabs/ts-interface-builder-wl)
+[![npm version](https://badge.fury.io/js/ts-interface-builder-wl.svg)](https://badge.fury.io/js/ts-interface-builder-wl)
 
 > Compile TypeScript interfaces into a description that allows runtime validation.
 
@@ -13,20 +13,20 @@ TypeScript interface, and to produce informative error messages if they do not.
 ## Installation
 
 ```
-npm install --save-dev ts-interface-builder
+npm install --save-dev ts-interface-builder-wl
 npm install --save ts-interface-checker
 ```
 
 ## Usage
 
 This module works together with [ts-interface-checker](https://github.com/gristlabs/ts-interface-checker) module. You use
-`ts-interface-builder` in a build step that converts some TypeScript interfaces
+`ts-interface-builder-wl` in a build step that converts some TypeScript interfaces
 to a new TypeScript or JavaScript file (with `-ti.ts` or `-ti.js` extension) that provides a runtime
 description of the interface. You then use `ts-interface-checker` in your
 program to create validator functions from this runtime description.
 
 ```
-`npm bin`/ts-interface-builder [options] <typescript-files...>
+`npm bin`/ts-interface-builder-wl [options] <typescript-files...>
 ```
 
 By default, produces `<ts-file>-ti.ts` file for each input file, which has
@@ -43,7 +43,7 @@ interface Square {
 
 Then you can generate code for runtime checks with:
 ```bash
-`npm bin`/ts-interface-builder foo.ts
+`npm bin`/ts-interface-builder-wl foo.ts
 ```
 
 It produces a file like this:

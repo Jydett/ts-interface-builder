@@ -20,7 +20,7 @@ async function snapshot(output: string, snapshotFile: string) {
   }
 }
 
-describe("ts-interface-builder/macro", () => {
+describe("ts-interface-builder-wl/macro", () => {
   it("locals", async function () {
     this.timeout(5000);
     const file = join(fixtures, "macro-locals.ts");
@@ -44,7 +44,7 @@ describe("ts-interface-builder/macro", () => {
     const tsOutput = tsCompile(await readFile(file, { encoding: "utf8" }));
     assert.throws(() => babelCompile(tsOutput, file), {
       name: "MacroError",
-      message: `${file}: ts-interface-builder/macro: Reference 1 to getCheckers not used for a call expression`,
+      message: `${file}: ts-interface-builder-wl/macro: Reference 1 to getCheckers not used for a call expression`,
     } as any);
   });
   it("error evaluating arguments", async function () {
@@ -52,7 +52,7 @@ describe("ts-interface-builder/macro", () => {
     const tsOutput = tsCompile(await readFile(file, { encoding: "utf8" }));
     assert.throws(() => babelCompile(tsOutput, file), {
       name: "MacroError",
-      message: `${file}: ts-interface-builder/macro: Unable to evaluate argument 1 of getCheckers call 1`,
+      message: `${file}: ts-interface-builder-wl/macro: Unable to evaluate argument 1 of getCheckers call 1`,
     } as any);
   });
   it("error compiling", async function () {
@@ -62,9 +62,9 @@ describe("ts-interface-builder/macro", () => {
     const errorCompilingFile = join(fixtures, "ignore-generics.ts");
     assert.throws(() => babelCompile(tsOutput, file), {
       name: "MacroError",
-      message: `${file}: ts-interface-builder/macro: ` +
+      message: `${file}: ts-interface-builder-wl/macro: ` +
         `Error compiling file ${errorCompilingFile} with options {"inlineImports":true,"format":"js:cjs"}: ` +
-        `Error: Generics are not yet supported by ts-interface-builder: IMyType<string>`,
+        `Error: Generics are not yet supported by ts-interface-builder-wl: IMyType<string>`,
     } as any);
   });
 });
@@ -89,7 +89,7 @@ function babelCompile(code: string, filename: string): string {
   return babel.transform(code, {
     babelrc: false,
     plugins: [
-      [macroPlugin, { "ts-interface-builder": { inlineImports: true } }],
+      [macroPlugin, { "ts-interface-builder-wl": { inlineImports: true } }],
     ],
     filename,
     // Note: Type definitions for @babel/core's TransformOptions.inputSourceMap is wrong; see https://babeljs.io/docs/en/options#source-map-options

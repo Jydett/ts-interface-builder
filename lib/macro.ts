@@ -131,6 +131,6 @@ const macroHandler: MacroHandler = (params) => {
   }
 };
 
-const macroParams = { configName: "ts-interface-builder" };
+const macroParams = { configName: "ts-interface-builder-wl" };
 
 export const macro = () => createMacro(macroHandler, macroParams);

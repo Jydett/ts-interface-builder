@@ -5,7 +5,7 @@ import {Compiler} from "../lib/index";
 
 const fixtures = join(__dirname, "fixtures");
 
-describe("ts-interface-builder", () => {
+describe("ts-interface-builder-wl", () => {
   it("should compile interface to runtime code", async () => {
     const output = await Compiler.compile(join(fixtures, "sample.ts"));
     const expected = await readFile(join(fixtures, "sample-ti.ts"), {encoding: "utf8"});

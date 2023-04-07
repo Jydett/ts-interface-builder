@@ -1,11 +1,11 @@
 {
   "name": "ts-interface-builder-wl",
-  "version": "0.3.4",
+  "version": "0.3.5",
   "description": "Compile TypeScript interfaces into a description that allows runtime validation",
   "main": "dist/index",
   "typings": "dist/index",
   "bin": {
-    "ts-interface-builder": "bin/ts-interface-builder"
+    "ts-interface-builder-wl": "bin/ts-interface-builder-wl"
   },
   "scripts": {
     "build": "tsc",
@@ -32,10 +32,10 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Jydett/ts-interface-builder"
+    "url": "https://github.com/Jydett/ts-interface-builder-wl"
   },
   "bugs": {
-    "url": "https://github.com/Jydett/ts-interface-builder/issues"
+    "url": "https://github.com/Jydett/ts-interface-builder-wl/issues"
   },
   "files": [
     "dist",
