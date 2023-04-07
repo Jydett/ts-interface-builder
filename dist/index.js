@@ -34,7 +34,8 @@ class Compiler {
         if (!topNode) {
             throw new Error(`Can't process ${filePath}: ${collectDiagnostics(program)}`);
         }
-        options = Object.assign({ format: defaultFormat, ignoreGenerics: false, ignoreIndexSignature: false, inlineImports: false, defaultSpace: defaultIndentSize }, options);
+        options = Object.assign({ format: defaultFormat, ignoreGenerics: false, ignoreIndexSignature: false, inlineImports: false, indentSize: defaultIndentSize }, options);
+        console.log(`Starting with options '${JSON.stringify(options)}'`);
         return new Compiler(checker, options, topNode).compileNode(topNode);
     }
     getName(id) {
@@ -42,7 +43,7 @@ class Compiler {
         return symbol ? symbol.getName() : "unknown";
     }
     indent(content) {
-        return content.replace(/\n/g, "\n" + " ".repeat(this.options.defaultSpace));
+        return content.replace(/\n/g, "\n" + " ".repeat(this.options.indentSize));
     }
     compileNode(node) {
         switch (node.kind) {
@@ -152,7 +153,7 @@ class Compiler {
         const members = node.members
             .map(n => this.compileNode(n))
             .filter(n => n !== ignoreNode)
-            .map(n => " ".repeat(this.options.defaultSpace) + this.indent(n) + ",\n");
+            .map(n => " ".repeat(this.options.indentSize) + this.indent(n) + ",\n");
         return `t.iface([], {\n${members.join("")}})`;
     }
     _compileArrayTypeNode(node) {
@@ -193,7 +194,7 @@ class Compiler {
         const members = node.members
             .map(n => this.compileNode(n))
             .filter(n => n !== ignoreNode)
-            .map(n => " ".repeat(this.options.defaultSpace) + this.indent(n) + ",\n");
+            .map(n => " ".repeat(this.options.indentSize) + this.indent(n) + ",\n");
         const extend = [];
         if (node.heritageClauses) {
             for (const h of node.heritageClauses) {
@@ -250,7 +251,7 @@ class Compiler {
         return prefix +
             this._compileSourceFileStatements(node) + "\n\n" +
             "const exportedTypeSuite" + (this.options.format === "ts" ? ": t.ITypeSuite" : "") + " = {\n" +
-            this.exportedNames.map((n) => " ".repeat(this.options.defaultSpace) + `${n},\n`).join("") +
+            this.exportedNames.map((n) => " ".repeat(this.options.indentSize) + `${n},\n`).join("") +
             "};\n" +
             "export default exportedTypeSuite;\n";
     }
@@ -267,7 +268,7 @@ class Compiler {
     }
     _formatExport(name, expression) {
         return this.options.format === "js:cjs"
-            ? " ".repeat(this.options.defaultSpace) + `${name}: ${this.indent(expression)},`
+            ? " ".repeat(this.options.indentSize) + `${name}: ${this.indent(expression)},`
             : `export const ${name} = ${expression};`;
     }
 }
@@ -320,7 +321,7 @@ function main() {
         ignoreGenerics: commander.ignoreGenerics,
         ignoreIndexSignature: commander.ignoreIndexSignature,
         inlineImports: commander.inlineImports,
-        defaultSpace: commander.defaultSpace,
+        indentSize: commander.indentSize,
     };
     if (files.length === 0) {
         commander.outputHelp();
@@ -341,7 +342,6 @@ function main() {
             continue;
         }
         if (verbose) {
-            console.log(`Starting with options '${JSON.stringify(options)}'`);
             console.log(`Compiling ${filePath} -> ${outPath}`);
         }
         const generatedCode = defaultHeader + Compiler.compile(filePath, options);

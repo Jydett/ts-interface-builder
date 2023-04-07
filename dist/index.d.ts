@@ -4,7 +4,7 @@ export interface ICompilerOptions {
     ignoreGenerics?: boolean;
     ignoreIndexSignature?: boolean;
     inlineImports?: boolean;
-    defaultSpace?: number;
+    indentSize?: number;
 }
 export declare class Compiler {
     private checker;
