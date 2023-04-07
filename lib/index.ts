@@ -321,7 +321,7 @@ export function main() {
   .usage("[options] <typescript-file...>")
   .option("--format <format>", `Format to use for output; options are 'ts' (default), 'js:esm', 'js:cjs'`)
   .option("-g, --ignore-generics", `Ignores generics`)
-  .option("-s, --indent-size", `Size of indent (default ${defaultIndentSize})`, defaultIndentSize)
+  .option("-z, --indent-size", `Size of indent (default ${defaultIndentSize})`, defaultIndentSize)
   .option("-i, --ignore-index-signature", `Ignores index signature`)
   .option("--inline-imports", `Traverses the full import tree and inlines all types into output`)
   .option("-s, --suffix <suffix>", `Suffix to append to generated files (default ${defaultSuffix})`, defaultSuffix)
