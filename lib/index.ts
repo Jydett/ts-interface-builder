@@ -10,6 +10,7 @@ import * as ts from "typescript";
 const defaultFormat = "ts"
 // Default suffix appended to generated files. Abbreviation for "ts-interface".
 const defaultSuffix = "-ti";
+const defaultIndentSize = 2;
 // Default header prepended to the generated module.
 const defaultHeader =
 `/**
@@ -23,6 +24,7 @@ export interface ICompilerOptions {
   ignoreGenerics?: boolean;
   ignoreIndexSignature?: boolean;
   inlineImports?: boolean;
+  defaultSpace?: number;
 }
 
 // The main public interface is `Compiler.compile`.
@@ -38,7 +40,13 @@ export class Compiler {
     if (!topNode) {
       throw new Error(`Can't process ${filePath}: ${collectDiagnostics(program)}`);
     }
-    options = {format: defaultFormat, ignoreGenerics: false, ignoreIndexSignature: false, inlineImports: false, ...options}
+    options = {
+      format: defaultFormat, 
+      ignoreGenerics: false, 
+      ignoreIndexSignature: false, 
+      inlineImports: false, 
+      defaultSpace: defaultIndentSize, 
+      ...options}
     return new Compiler(checker, options, topNode).compileNode(topNode);
   }
 
@@ -52,7 +60,7 @@ export class Compiler {
   }
 
   private indent(content: string): string {
-    return content.replace(/\n/g, "\n  ");
+    return content.replace(/\n/g, "\n" + " ".repeat(this.options.defaultSpace));
   }
   private compileNode(node: ts.Node): string {
     switch (node.kind) {
@@ -158,7 +166,7 @@ export class Compiler {
     const members = node.members
       .map(n => this.compileNode(n))
       .filter(n => n !== ignoreNode)
-      .map(n => "  " + this.indent(n) + ",\n");
+      .map(n => " ".repeat(this.options.defaultSpace) + this.indent(n) + ",\n");
     return `t.iface([], {\n${members.join("")}})`;
   }
   private _compileArrayTypeNode(node: ts.ArrayTypeNode): string {
@@ -200,7 +208,7 @@ export class Compiler {
     const members = node.members
       .map(n => this.compileNode(n))
       .filter(n => n !== ignoreNode)
-      .map(n => "  " + this.indent(n) + ",\n");
+      .map(n => " ".repeat(this.options.defaultSpace) + this.indent(n) + ",\n");
     const extend: string[] = [];
     if (node.heritageClauses) {
       for (const h of node.heritageClauses) {
@@ -313,6 +321,7 @@ export function main() {
   .usage("[options] <typescript-file...>")
   .option("--format <format>", `Format to use for output; options are 'ts' (default), 'js:esm', 'js:cjs'`)
   .option("-g, --ignore-generics", `Ignores generics`)
+  .option("-s, --indent-size", `Size of indent (default ${defaultIndentSize})`, defaultIndentSize)
   .option("-i, --ignore-index-signature", `Ignores index signature`)
   .option("--inline-imports", `Traverses the full import tree and inlines all types into output`)
   .option("-s, --suffix <suffix>", `Suffix to append to generated files (default ${defaultSuffix})`, defaultSuffix)
@@ -331,6 +340,7 @@ export function main() {
     ignoreGenerics: commander.ignoreGenerics,
     ignoreIndexSignature: commander.ignoreIndexSignature,
     inlineImports: commander.inlineImports,
+    defaultSpace: commander.defaultSpace,
   };
 
   if (files.length === 0) {
