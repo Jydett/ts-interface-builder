@@ -128,7 +128,7 @@ class Compiler {
                     return `t.enumlit("${node.typeName.left.getText()}", "${node.typeName.right.getText()}")`;
                 }
             }
-            return `TI"${node.typeName.getText()}"`;
+            return `"TI${node.typeName.getText()}"`;
         }
         else if (node.typeName.getText() === "Promise") {
             // Unwrap Promises.
