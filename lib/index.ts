@@ -119,7 +119,7 @@ export class Compiler {
   }
 
   private _compileIdentifier(node: ts.Identifier): string {
-    return `TI"${node.getText()}"`;
+    return `uwu"${node.getText()}"`;
   }
   private _compileParameterDeclaration(node: ts.ParameterDeclaration): string {
     const name = this.getName(node.name);

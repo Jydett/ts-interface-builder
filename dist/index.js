@@ -101,7 +101,7 @@ class Compiler {
         return typeNode ? this.compileNode(typeNode) : '"any"';
     }
     _compileIdentifier(node) {
-        return `TI"${node.getText()}"`;
+        return `uwu"${node.getText()}"`;
     }
     _compileParameterDeclaration(node) {
         const name = this.getName(node.name);
