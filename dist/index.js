@@ -38,9 +38,9 @@ class Compiler {
         console.log(`Starting with options '${JSON.stringify(options)}'`);
         return new Compiler(checker, options, topNode).compileNode(topNode);
     }
-    getName(id) {
+    getName(id, prefix = 'TI') {
         const symbol = this.checker.getSymbolAtLocation(id);
-        return symbol ? 'TI' + symbol.getName() : "unknown";
+        return symbol ? prefix + symbol.getName() : "unknown";
     }
     indent(content) {
         return content.replace(/\n/g, "\n" + " ".repeat(this.options.indentSize));
@@ -101,7 +101,7 @@ class Compiler {
         return typeNode ? this.compileNode(typeNode) : '"any"';
     }
     _compileIdentifier(node) {
-        return `"${node.getText()}"`;
+        return `TI"${node.getText()}"`;
     }
     _compileParameterDeclaration(node) {
         const name = this.getName(node.name);
@@ -185,7 +185,7 @@ class Compiler {
     }
     _compileEnumDeclaration(node) {
         const name = this.getName(node.name);
-        const members = node.members.map(m => " ".repeat(this.options.indentSize) + `"${this.getName(m.name)}": ${getTextOfConstantValue(this.checker.getConstantValue(m))},\n`);
+        const members = node.members.map(m => " ".repeat(this.options.indentSize) + `"${this.getName(m.name, '')}": ${getTextOfConstantValue(this.checker.getConstantValue(m))},\n`);
         this.exportedNames.push(name);
         return this._formatExport(name, `t.enumtype({\n${members.join("")}})`);
     }
@@ -323,9 +323,6 @@ function main() {
         inlineImports: commander.inlineImports,
         indentSize: commander.indentSize,
     };
-    console.log("process.argv: " + process.argv);
-    console.log("commander indentSize: " + commander.indentSize);
-    console.log("options indentSize: " + options.indentSize);
     if (files.length === 0) {
         commander.outputHelp();
         process.exit(1);

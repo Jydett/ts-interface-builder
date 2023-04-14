@@ -55,9 +55,9 @@ export class Compiler {
 
   constructor(private checker: ts.TypeChecker, private options: ICompilerOptions, private topNode: ts.SourceFile) {}
 
-  private getName(id: ts.Node): string {
+  private getName(id: ts.Node, prefix= 'TI'): string {
     const symbol = this.checker.getSymbolAtLocation(id);
-    return symbol ? 'TI' + symbol.getName() : "unknown";
+    return symbol ? prefix + symbol.getName() : "unknown";
   }
 
   private indent(content: string): string {
@@ -119,7 +119,7 @@ export class Compiler {
   }
 
   private _compileIdentifier(node: ts.Identifier): string {
-    return `"${node.getText()}"`;
+    return `TI"${node.getText()}"`;
   }
   private _compileParameterDeclaration(node: ts.ParameterDeclaration): string {
     const name = this.getName(node.name);
@@ -200,7 +200,7 @@ export class Compiler {
   private _compileEnumDeclaration(node: ts.EnumDeclaration): string {
     const name = this.getName(node.name);
     const members: string[] = node.members.map(m =>
-        " ".repeat(this.options.indentSize) + `"${this.getName(m.name)}": ${getTextOfConstantValue(this.checker.getConstantValue(m))},\n`);
+        " ".repeat(this.options.indentSize) + `"${this.getName(m.name, '')}": ${getTextOfConstantValue(this.checker.getConstantValue(m))},\n`);
     this.exportedNames.push(name);
     return this._formatExport(name, `t.enumtype({\n${members.join("")}})`);
   }
@@ -343,9 +343,6 @@ export function main() {
     inlineImports: commander.inlineImports,
     indentSize: commander.indentSize,
   };
-console.log("process.argv: " + process.argv)
-console.log("commander indentSize: " + commander.indentSize)
-console.log("options indentSize: " + options.indentSize)
   
   if (files.length === 0) {
     commander.outputHelp();
