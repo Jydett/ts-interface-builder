@@ -320,11 +320,11 @@ export function main() {
   commander
   .description("Create runtime validator module from TypeScript interfaces")
   .usage("[options] <typescript-file...>")
-  .option("--format <format>", `Format to use for output; options are 'ts' (default), 'js:esm', 'js:cjs'`)
+  .option("-f, --format <format>", `Format to use for output; options are 'ts' (default), 'js:esm', 'js:cjs'`)
   .option("-g, --ignore-generics", `Ignores generics`)
-  .option("-z, --indent-size", `Size of indent (default ${defaultIndentSize})`, defaultIndentSize)
+  .option("-z, --indent-size <size>", `Size of indent (default ${defaultIndentSize})`, defaultIndentSize)
   .option("-i, --ignore-index-signature", `Ignores index signature`)
-  .option("--inline-imports", `Traverses the full import tree and inlines all types into output`)
+  .option("-m, --inline-imports", `Traverses the full import tree and inlines all types into output`)
   .option("-s, --suffix <suffix>", `Suffix to append to generated files (default ${defaultSuffix})`, defaultSuffix)
   .option("-o, --outDir <path>", `Directory for output files; same as source file if omitted`)
   .option("-v, --verbose", "Produce verbose output")
@@ -357,11 +357,15 @@ console.log("options indentSize: " + options.indentSize)
   const globFiles = ([] as string[]).concat(...files.map(p => glob.sync(p)));
 
   for (const filePath of globFiles) {
-    if (filePath.endsWith("-ti")) continue;
     // Read and parse the source file.
     const ext = path.extname(filePath);
     const dir = outDir || path.dirname(filePath);
-    const outPath = path.join(dir, path.basename(filePath, ext) + suffix + (options.format === "ts" ? ".ts" : ".js"));
+    const fileName = path.basename(filePath, ext);
+    if (filePath.endsWith("-ti")) {
+      fs.unlinkSync(filePath);
+      continue;
+    }
+    const outPath = path.join(dir, fileName + suffix + (options.format === "ts" ? ".ts" : ".js"));
 
     if (changedOnly && !needsUpdate(filePath, outPath)) {
       if (verbose) {
