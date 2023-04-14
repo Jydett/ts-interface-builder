@@ -282,7 +282,7 @@ export class Compiler {
   }
   private _formatExport(name: string, expression: string): string {
     return this.options.format === "js:cjs"
-        ? " ".repeat(this.options.indentSize) +`${name}: ${this.indent(expression)},`
+        ? " ".repeat(this.options.indentSize) +`TI${name}: ${this.indent(expression)},`
         : `export const ${name} = ${expression};`;
   }
 }
@@ -343,7 +343,9 @@ export function main() {
     inlineImports: commander.inlineImports,
     indentSize: commander.indentSize,
   };
-
+console.log("Commander indentSize: " + commander.indentSize)
+console.log("options indentSize: " + options.indentSize)
+  
   if (files.length === 0) {
     commander.outputHelp();
     process.exit(1);
