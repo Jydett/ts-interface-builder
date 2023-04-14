@@ -343,7 +343,8 @@ export function main() {
     inlineImports: commander.inlineImports,
     indentSize: commander.indentSize,
   };
-console.log("Commander indentSize: " + commander.indentSize)
+console.log("process.argv: " + process.argv)
+console.log("commander indentSize: " + commander.indentSize)
 console.log("options indentSize: " + options.indentSize)
   
   if (files.length === 0) {
@@ -356,6 +357,7 @@ console.log("options indentSize: " + options.indentSize)
   const globFiles = ([] as string[]).concat(...files.map(p => glob.sync(p)));
 
   for (const filePath of globFiles) {
+    if (filePath.endsWith("-ti")) continue;
     // Read and parse the source file.
     const ext = path.extname(filePath);
     const dir = outDir || path.dirname(filePath);
