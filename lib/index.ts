@@ -119,7 +119,7 @@ export class Compiler {
   }
 
   private _compileIdentifier(node: ts.Identifier): string {
-    return `uwu"${node.getText()}"`;
+    return `"${node.getText()}"`;
   }
   private _compileParameterDeclaration(node: ts.ParameterDeclaration): string {
     const name = this.getName(node.name);
@@ -127,7 +127,7 @@ export class Compiler {
     return `t.param("${name}", ${this.compileOptType(node.type)}${isOpt})`;
   }
   private _compilePropertySignature(node: ts.PropertySignature): string {
-    const name = this.getName(node.name);
+    const name = this.getName(node.name, '');
     const prop = this.compileOptType(node.type);
     const value = node.questionToken ? `t.opt(${prop})` : prop;
     return `"${name}": ${value}`;

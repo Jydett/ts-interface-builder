@@ -101,7 +101,7 @@ class Compiler {
         return typeNode ? this.compileNode(typeNode) : '"any"';
     }
     _compileIdentifier(node) {
-        return `uwu"${node.getText()}"`;
+        return `"${node.getText()}"`;
     }
     _compileParameterDeclaration(node) {
         const name = this.getName(node.name);
@@ -109,7 +109,7 @@ class Compiler {
         return `t.param("${name}", ${this.compileOptType(node.type)}${isOpt})`;
     }
     _compilePropertySignature(node) {
-        const name = this.getName(node.name);
+        const name = this.getName(node.name, '');
         const prop = this.compileOptType(node.type);
         const value = node.questionToken ? `t.opt(${prop})` : prop;
         return `"${name}": ${value}`;
