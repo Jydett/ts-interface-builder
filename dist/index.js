@@ -40,7 +40,7 @@ class Compiler {
     }
     getName(id) {
         const symbol = this.checker.getSymbolAtLocation(id);
-        return symbol ? symbol.getName() : "unknown";
+        return symbol ? 'TI' + symbol.getName() : "unknown";
     }
     indent(content) {
         return content.replace(/\n/g, "\n" + " ".repeat(this.options.indentSize));
@@ -185,7 +185,7 @@ class Compiler {
     }
     _compileEnumDeclaration(node) {
         const name = this.getName(node.name);
-        const members = node.members.map(m => `  "${this.getName(m.name)}": ${getTextOfConstantValue(this.checker.getConstantValue(m))},\n`);
+        const members = node.members.map(m => " ".repeat(this.options.indentSize) + `"${this.getName(m.name)}": ${getTextOfConstantValue(this.checker.getConstantValue(m))},\n`);
         this.exportedNames.push(name);
         return this._formatExport(name, `t.enumtype({\n${members.join("")}})`);
     }

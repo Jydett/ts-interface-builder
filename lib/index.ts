@@ -57,7 +57,7 @@ export class Compiler {
 
   private getName(id: ts.Node): string {
     const symbol = this.checker.getSymbolAtLocation(id);
-    return symbol ? symbol.getName() : "unknown";
+    return symbol ? 'TI' + symbol.getName() : "unknown";
   }
 
   private indent(content: string): string {
@@ -200,7 +200,7 @@ export class Compiler {
   private _compileEnumDeclaration(node: ts.EnumDeclaration): string {
     const name = this.getName(node.name);
     const members: string[] = node.members.map(m =>
-      `  "${this.getName(m.name)}": ${getTextOfConstantValue(this.checker.getConstantValue(m))},\n`);
+        " ".repeat(this.options.indentSize) + `"${this.getName(m.name)}": ${getTextOfConstantValue(this.checker.getConstantValue(m))},\n`);
     this.exportedNames.push(name);
     return this._formatExport(name, `t.enumtype({\n${members.join("")}})`);
   }
