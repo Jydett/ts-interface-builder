@@ -361,7 +361,7 @@ console.log("options indentSize: " + options.indentSize)
     const ext = path.extname(filePath);
     const dir = outDir || path.dirname(filePath);
     const fileName = path.basename(filePath, ext);
-    if (filePath.endsWith("-ti")) {
+    if (fileName.endsWith("-ti")) {
       fs.unlinkSync(filePath);
       continue;
     }
